@@ -254,7 +254,14 @@ function showCard() {
   document.getElementById('progress-bar').style.width = `${(currentIdx / total) * 100}%`;
   document.getElementById('progress-text').textContent = `${currentIdx + 1} / ${total}`;
 
-  // Card content
+  // Reset flip BEFORE updating content so the back never flashes into view
+  cardEl.classList.add('no-transition');
+  cardEl.classList.remove('flipped');
+  cardEl.offsetHeight; // force reflow so the class takes effect before transition is restored
+  cardEl.classList.remove('no-transition');
+  isFlipped = false;
+
+  // Card content (back is now hidden, safe to update)
   document.getElementById('card-front-word').textContent = card.front;
   document.getElementById('card-deck-label').textContent = card.deck;
   document.getElementById('card-back-word').textContent = card.back;
@@ -268,30 +275,23 @@ function showCard() {
     imgEl.src = imgUrl;
     imgEl.classList.remove('hidden');
     cardEl.classList.add('has-image');
-  } else {
+  } else if (imgEl) {
     imgEl.src = '';
     imgEl.classList.add('hidden');
     cardEl.classList.remove('has-image');
   }
-
-  // Reset flip instantly (no animation — prevents Russian side flashing into view)
-  cardEl.classList.add('no-transition');
-  cardEl.classList.remove('flipped');
-  cardEl.offsetHeight; // force reflow so the class takes effect before transition is restored
-  cardEl.classList.remove('no-transition');
-  isFlipped = false;
 
   // Show "Show answer" button
   document.getElementById('controls-show').classList.remove('hidden');
   document.getElementById('controls-rate').classList.add('hidden');
 }
 
-function showAnswer() {
-  if (isFlipped) return;
-  isFlipped = true;
-  document.getElementById('card').classList.add('flipped');
-  document.getElementById('controls-show').classList.add('hidden');
-  document.getElementById('controls-rate').classList.remove('hidden');
+function toggleFlip() {
+  const cardEl = document.getElementById('card');
+  isFlipped = !isFlipped;
+  cardEl.classList.toggle('flipped', isFlipped);
+  document.getElementById('controls-show').classList.toggle('hidden', isFlipped);
+  document.getElementById('controls-rate').classList.toggle('hidden', !isFlipped);
 }
 
 function rateAndNext(knew) {
@@ -344,7 +344,7 @@ document.addEventListener('keydown', e => {
     case ' ':
     case 'Enter':
       e.preventDefault();
-      if (!isFlipped) showAnswer();
+      toggleFlip();
       break;
     case 'ArrowRight':
     case 'k':
@@ -388,8 +388,8 @@ async function init() {
   document.getElementById('btn-import-new').addEventListener('click', () => showScreen('screen-import'));
 
   // ── Study screen ──
-  document.getElementById('card').addEventListener('click', showAnswer);
-  document.getElementById('btn-show').addEventListener('click', showAnswer);
+  document.getElementById('card').addEventListener('click', toggleFlip);
+  document.getElementById('btn-show').addEventListener('click', toggleFlip);
   document.getElementById('btn-wrong').addEventListener('click', () => rateAndNext(false));
   document.getElementById('btn-know').addEventListener('click', () => rateAndNext(true));
   document.getElementById('btn-home').addEventListener('click', showHome);
