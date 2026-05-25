@@ -1,4 +1,4 @@
-const CACHE = 'lt-words-v2';
+const CACHE = 'lt-words-v3';
 const ASSETS = [
   './index.html',
   './app.js',
