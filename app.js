@@ -98,19 +98,19 @@ function parseSheets(workbook) {
     for (let i = startIdx; i < rows.length; i++) {
       const row = rows[i];
       const front = String(row[0] || '').trim();
-      const back  = String(row[1] || '').trim();
+      const back = String(row[1] || '').trim();
       if (!front || !back) continue;
 
       cards.push({
-        id:             crypto.randomUUID(),
-        deck:           sheetName,
+        id: crypto.randomUUID(),
+        deck: sheetName,
         front,
         back,
-        note:           String(row[2] || '').trim(),
-        imageBlob:      null,
-        leitnerBox:     1,
-        nextReview:     0,       // 0 = immediately due
-        totalReviews:   0,
+        note: String(row[2] || '').trim(),
+        imageBlob: null,
+        leitnerBox: 1,
+        nextReview: 0,       // 0 = immediately due
+        totalReviews: 0,
         correctReviews: 0
       });
     }
@@ -119,13 +119,13 @@ function parseSheets(workbook) {
 }
 
 // ── State ─────────────────────────────────────────────────────
-let allCards       = [];
-let studyQueue     = [];
-let currentIdx     = 0;
-let isFlipped      = false;
-let selectedDecks  = new Set();
-let sessionStats   = { correct: 0, wrong: 0, startTime: 0 };
-let imageMap       = {};
+let allCards = [];
+let studyQueue = [];
+let currentIdx = 0;
+let isFlipped = false;
+let selectedDecks = new Set();
+let sessionStats = { correct: 0, wrong: 0, startTime: 0 };
+let imageMap = {};
 
 // ── Screen Management ─────────────────────────────────────────
 function showScreen(id) {
@@ -186,17 +186,17 @@ function renderDeckSelector(deckNames) {
 
   for (const deck of deckNames) {
     const total = allCards.filter(c => c.deck === deck).length;
-    const due   = allCards.filter(c => c.deck === deck && isDue(c)).length;
+    const due = allCards.filter(c => c.deck === deck && isDue(c)).length;
 
     const label = document.createElement('label');
     label.className = 'deck-option' + (selectedDecks.has(deck) ? ' selected' : '');
 
     const cb = document.createElement('input');
-    cb.type    = 'checkbox';
+    cb.type = 'checkbox';
     cb.checked = selectedDecks.has(deck);
     cb.addEventListener('change', () => {
       if (cb.checked) { selectedDecks.add(deck); label.classList.add('selected'); }
-      else            { selectedDecks.delete(deck); label.classList.remove('selected'); }
+      else { selectedDecks.delete(deck); label.classList.remove('selected'); }
       updateDueBadge();
     });
 
@@ -246,8 +246,8 @@ function showCard() {
     return;
   }
 
-  const card   = studyQueue[currentIdx];
-  const total  = studyQueue.length;
+  const card = studyQueue[currentIdx];
+  const total = studyQueue.length;
   const cardEl = document.getElementById('card');
 
   // Progress
@@ -255,14 +255,14 @@ function showCard() {
   document.getElementById('progress-text').textContent = `${currentIdx + 1} / ${total}`;
 
   // Card content
-  document.getElementById('card-front-word').textContent  = card.front;
-  document.getElementById('card-deck-label').textContent  = card.deck;
-  document.getElementById('card-back-word').textContent   = card.back;
-  document.getElementById('card-note').textContent        = card.note || '';
+  document.getElementById('card-front-word').textContent = card.front;
+  document.getElementById('card-deck-label').textContent = card.deck;
+  document.getElementById('card-back-word').textContent = card.back;
+  document.getElementById('card-note').textContent = card.note || '';
   document.getElementById('card-box-indicator').textContent = `Box ${card.leitnerBox}`;
 
   // Image
-  const imgEl  = document.getElementById('card-front-img');
+  const imgEl = document.getElementById('card-front-img');
   const imgUrl = imageMap[card.front];
   if (imgUrl) {
     imgEl.src = imgUrl;
@@ -299,19 +299,19 @@ function rateAndNext(knew) {
   rateCard(card, knew);
   putCard(card); // fire-and-forget — UI stays snappy
   if (knew) sessionStats.correct++;
-  else      sessionStats.wrong++;
+  else sessionStats.wrong++;
   currentIdx++;
   showCard();
 }
 
 // ── Complete Screen ───────────────────────────────────────────
 function showComplete() {
-  const total    = sessionStats.correct + sessionStats.wrong;
-  const pct      = total ? Math.round((sessionStats.correct / total) * 100) : 0;
-  const elapsed  = Math.round((Date.now() - sessionStats.startTime) / 1000);
-  const mins     = Math.floor(elapsed / 60);
-  const secs     = elapsed % 60;
-  const timeStr  = mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
+  const total = sessionStats.correct + sessionStats.wrong;
+  const pct = total ? Math.round((sessionStats.correct / total) * 100) : 0;
+  const elapsed = Math.round((Date.now() - sessionStats.startTime) / 1000);
+  const mins = Math.floor(elapsed / 60);
+  const secs = elapsed % 60;
+  const timeStr = mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
 
   document.getElementById('complete-stats').innerHTML = `
     <div class="stat-card">
@@ -362,7 +362,7 @@ document.addEventListener('keydown', e => {
 // ── Init ─────────────────────────────────────────────────────
 async function init() {
   db = await openDB();
-  fetch('images.json').then(r => r.json()).then(d => { imageMap = d; }).catch(() => {});
+  fetch('images.json').then(r => r.json()).then(d => { imageMap = d; }).catch(() => { });
 
   // ── Import screen ──
   const dropZone = document.getElementById('drop-zone');
@@ -391,16 +391,16 @@ async function init() {
   document.getElementById('card').addEventListener('click', showAnswer);
   document.getElementById('btn-show').addEventListener('click', showAnswer);
   document.getElementById('btn-wrong').addEventListener('click', () => rateAndNext(false));
-  document.getElementById('btn-know').addEventListener('click',  () => rateAndNext(true));
-  document.getElementById('btn-home').addEventListener('click',  showHome);
+  document.getElementById('btn-know').addEventListener('click', () => rateAndNext(true));
+  document.getElementById('btn-home').addEventListener('click', showHome);
 
   // ── Complete screen ──
-  document.getElementById('btn-again').addEventListener('click',        startStudy);
+  document.getElementById('btn-again').addEventListener('click', startStudy);
   document.getElementById('btn-home-complete').addEventListener('click', showHome);
 
   // ── Register Service Worker ──
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js').catch(() => {});
+    navigator.serviceWorker.register('./sw.js').catch(() => { });
   }
 
   // ── Boot ──

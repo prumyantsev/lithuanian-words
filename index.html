@@ -1,108 +1,124 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#6366f1">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <title>Lithuanian Words</title>
-  <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-<div id="app">
-
-  <!-- ── Import Screen ─────────────────────────────────────── -->
-  <div id="screen-import" class="screen">
-    <div class="app-header">
-      <div class="logo">LT</div>
-      <h1>Lithuanian Words</h1>
-      <p class="subtitle">Import your word list to begin</p>
-    </div>
-
-    <div id="drop-zone">
-      <div class="drop-icon">&#128196;</div>
-      <p>Drop <strong>words.xlsx</strong> here</p>
-      <p class="or">— or —</p>
-      <label class="btn btn-primary" for="file-input">Choose file</label>
-      <input type="file" id="file-input" accept=".xlsx">
-    </div>
-
-    <div id="import-status" class="status-msg"></div>
-  </div>
-
-  <!-- ── Home Screen ───────────────────────────────────────── -->
-  <div id="screen-home" class="screen hidden">
-    <div class="app-header">
-      <div class="logo">LT</div>
-      <h1>Lithuanian Words</h1>
-      <div id="due-badge" class="due-badge"></div>
-    </div>
-
-    <div class="section-label">Select decks to study</div>
-    <div id="deck-selector" class="deck-list"></div>
-
-    <div class="action-group">
-      <button id="btn-study" class="btn btn-primary btn-large">Start studying</button>
-      <button id="btn-import-new" class="btn btn-ghost">Import new file</button>
-    </div>
-  </div>
-
-  <!-- ── Study Screen ──────────────────────────────────────── -->
-  <div id="screen-study" class="screen hidden">
-    <div class="study-top">
-      <button id="btn-home" class="btn btn-icon" title="Back">&#8592;</button>
-      <span id="progress-text" class="progress-text"></span>
-    </div>
-
-    <div class="progress-track">
-      <div id="progress-bar" class="progress-fill"></div>
-    </div>
-
-    <div id="card" class="card">
-      <div class="card-inner">
-        <div class="card-front">
-          <div id="card-box-indicator" class="box-indicator"></div>
-          <img id="card-front-img" class="card-img hidden" alt="" loading="lazy">
-          <div id="card-front-word" class="word"></div>
-          <div id="card-deck-label" class="deck-label"></div>
-          <div class="tap-hint">tap to reveal</div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="theme-color" content="#6366f1" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <title>Lithuanian Words</title>
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <!-- ── Import Screen ─────────────────────────────────────── -->
+      <div id="screen-import" class="screen">
+        <div class="app-header">
+          <div class="logo">LT</div>
+          <h1>Lithuanian Words</h1>
+          <p class="subtitle">Import your word list to begin</p>
         </div>
-        <div class="card-back">
-          <div id="card-back-word" class="word"></div>
-          <div id="card-note" class="note"></div>
+
+        <div id="drop-zone">
+          <div class="drop-icon">&#128196;</div>
+          <p>Drop <strong>words.xlsx</strong> here</p>
+          <p class="or">— or —</p>
+          <label class="btn btn-primary" for="file-input">Choose file</label>
+          <input type="file" id="file-input" accept=".xlsx" />
+        </div>
+
+        <div id="import-status" class="status-msg"></div>
+      </div>
+
+      <!-- ── Home Screen ───────────────────────────────────────── -->
+      <div id="screen-home" class="screen hidden">
+        <div class="app-header">
+          <div class="logo">LT</div>
+          <h1>Lithuanian Words</h1>
+          <div id="due-badge" class="due-badge"></div>
+        </div>
+
+        <div class="section-label">Select decks to study</div>
+        <div id="deck-selector" class="deck-list"></div>
+
+        <div class="action-group">
+          <button id="btn-study" class="btn btn-primary btn-large">
+            Start studying
+          </button>
+          <button id="btn-import-new" class="btn btn-ghost">
+            Import new file
+          </button>
+        </div>
+      </div>
+
+      <!-- ── Study Screen ──────────────────────────────────────── -->
+      <div id="screen-study" class="screen hidden">
+        <div class="study-top">
+          <button id="btn-home" class="btn btn-icon" title="Back">
+            &#8592;
+          </button>
+          <span id="progress-text" class="progress-text"></span>
+        </div>
+
+        <div class="progress-track">
+          <div id="progress-bar" class="progress-fill"></div>
+        </div>
+
+        <div id="card" class="card">
+          <div class="card-inner">
+            <div class="card-front">
+              <div id="card-box-indicator" class="box-indicator"></div>
+              <!--<img id="card-front-img" class="card-img hidden" alt="" loading="lazy">-->
+              <div id="card-front-word" class="word"></div>
+              <div id="card-deck-label" class="deck-label"></div>
+              <div class="tap-hint">tap to reveal</div>
+            </div>
+            <div class="card-back">
+              <div id="card-back-word" class="word"></div>
+              <div id="card-note" class="note"></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="controls-show" class="controls">
+          <button id="btn-show" class="btn btn-primary btn-large">
+            Show answer
+          </button>
+        </div>
+        <div id="controls-rate" class="controls hidden">
+          <button id="btn-wrong" class="btn btn-wrong btn-rate">
+            &#10007;&nbsp; Don't know
+          </button>
+          <button id="btn-know" class="btn btn-know btn-rate">
+            &#10003;&nbsp; Know it
+          </button>
+        </div>
+      </div>
+
+      <!-- ── Complete Screen ───────────────────────────────────── -->
+      <div id="screen-complete" class="screen hidden">
+        <div class="complete-hero">
+          <div class="complete-icon">&#10003;</div>
+          <h2>Session complete!</h2>
+        </div>
+
+        <div id="complete-stats" class="stats-grid"></div>
+
+        <div class="action-group">
+          <button id="btn-again" class="btn btn-primary btn-large">
+            Study again
+          </button>
+          <button id="btn-home-complete" class="btn btn-ghost">Home</button>
         </div>
       </div>
     </div>
+    <!-- #app -->
 
-    <div id="controls-show" class="controls">
-      <button id="btn-show" class="btn btn-primary btn-large">Show answer</button>
-    </div>
-    <div id="controls-rate" class="controls hidden">
-      <button id="btn-wrong" class="btn btn-wrong btn-rate">&#10007;&nbsp; Don't know</button>
-      <button id="btn-know" class="btn btn-know btn-rate">&#10003;&nbsp; Know it</button>
-    </div>
-  </div>
-
-  <!-- ── Complete Screen ───────────────────────────────────── -->
-  <div id="screen-complete" class="screen hidden">
-    <div class="complete-hero">
-      <div class="complete-icon">&#10003;</div>
-      <h2>Session complete!</h2>
-    </div>
-
-    <div id="complete-stats" class="stats-grid"></div>
-
-    <div class="action-group">
-      <button id="btn-again" class="btn btn-primary btn-large">Study again</button>
-      <button id="btn-home-complete" class="btn btn-ghost">Home</button>
-    </div>
-  </div>
-
-</div><!-- #app -->
-
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-<script src="app.js"></script>
-</body>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="app.js"></script>
+  </body>
 </html>
